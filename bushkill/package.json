@@ -1,0 +1,18 @@
+{
+  "name": "smokevotes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "smokevotes.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "steem": "^0.7.2",
+    "@whaleshares/wlsjs": "^0.1.1",
+    "string-format": "^2.0.0"
+  },
+  "devDependencies": {}
+}
