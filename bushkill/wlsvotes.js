@@ -22,8 +22,6 @@ steem.config.set('address_prefix', 'WLS');
 steem.config.set('chain_id', 'de999ada2ff7ed3d3d580381f229b40b5a0261aec48eb830e540080817b72866');
 
 steem.api.getWitnessCount(function(err, result) {
-  // console.log("Logging result 1", result);
-
   if ( err ) {
     console.log('Error getWitnessCount' + err);
   }
@@ -56,7 +54,6 @@ steem.api.getWitnessCount(function(err, result) {
         .then(function(list){
           var sum = 0;
           for ( var voter in list){
-            // console.log("Logging voter now: ",list[voter]);
             list[voter].votes.forEach(function(witnessName){
               if ( witnesses[witnessName] ) {
                 witnesses[witnessName].votes += 1;
@@ -64,9 +61,6 @@ steem.api.getWitnessCount(function(err, result) {
                 let w = list[voter].weight
 
                 let weightFloat = parseFloat(list[voter].weight);
-                // console.log(w);
-                // console.log(weightInt);
-                // console.log(weightFloat);
                 witnesses[witnessName].voters.push( { 'voter': '@'+voter, 'weight': weightFloat})
                 sum++;
               }
@@ -100,10 +94,7 @@ function formatDate(timestamp){
 }
 
 function compare(a, b) {
-  console.log("Logging Compare Function: ");
-  console.log("A: ", a, "B: ", b);
-  // console.log("Logging Compare Function Now");
-  // console.log("a = ", a," ","b = ",b);
+
   // Use toUpperCase() to ignore character casing
   const voterA = a.weight;
   const voterB = b.weight;
@@ -126,11 +117,9 @@ function writeMarkdown(witnesses) {
   var txt = '';
   for (var prop in witnesses){
       var voters = '';
-      // console.log(witnesses[prop]);
       witnesses[prop].voters.sort(compare)
       for(var voter of witnesses[prop].voters.reverse()) {
-        // console.log(voter);
-        voters += format('<a href="https://whaleshares.io/{}" title="{}" target="_blank">{}</a>', voter.voter, voter.vesting_shares, voter.voter) + ' '
+        voters += format('<a href="https://whaleshares.io/{}" title="{}" target="_blank">{}</a>', voter.voter, voter.weight, voter.voter) + ' '
       }
       txt += format('<tr>\n<td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>\n',
         witnesses[prop].rank, witnesses[prop].name, witnesses[prop].votes, witnesses[prop].weighted_vote, voters)
@@ -186,15 +175,10 @@ let getWitnessVotes =
             } else {
               var collectVotes = {};
               votes.forEach(function(vote){
-                // console.log("Logging Vote Now ", vote);
-                // Total vests = vesting_shares + received_vesting_shares - delegated_vesting_shares
                 // Total vest * 1,000,000
                 if (vote.witnesses_voted_for > 0) {
                   totalVests = vestToDecimal(vote.vesting_shares);
-                  console.log("Logging totalVests now: ", totalVests);
-                  console.log("Logging typeof totalVests now: ", typeof totalVests);
                   collectVotes[vote.name] = { 'votes': vote.witness_votes, 'weight': Math.round(totalVests * 1000000) }
-                  console.log( Math.round(totalVests * 1000000));
                 }
               });
               resolve(collectVotes);
@@ -218,7 +202,6 @@ let witnessVotesLeaderboard = function () {
     const fn = function (name, number) {
         return getAccountNames(name).then(function (names) {
             names.forEach(function (el) {
-              // console.log('Logging Element Now!:', el);
                 list.push(el);
             });
 
